@@ -23,6 +23,7 @@ import dagger.Provides;
 public class ApplicationModule {
 
     @Provides
+    @Singleton
     ViewModelProvider.Factory provideViewModelFactory(ViewModelFactory factory) {
         return factory;
     }

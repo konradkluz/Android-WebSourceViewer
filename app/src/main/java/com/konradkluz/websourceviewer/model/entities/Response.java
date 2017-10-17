@@ -31,6 +31,10 @@ public class Response<T> {
         return new Response<>(Status.SUCCESS, data, null);
     }
 
+    public static <T> Response<T> wrongUrl(T data) {
+        return new Response<>(Status.ERROR_VALIDATION, data, null);
+    }
+
     public static <T> Response<T> error(Throwable error) {
         if (error instanceof HttpException) {
             return new Response<>(Status.ERROR_SERVER, null, error);

@@ -7,5 +7,6 @@ public enum Status {
     SUCCESS,
     ERROR_NETWORK,
     ERROR_SERVER,
-    ERROR_OTHER
+    ERROR_OTHER,
+    ERROR_VALIDATION
 }

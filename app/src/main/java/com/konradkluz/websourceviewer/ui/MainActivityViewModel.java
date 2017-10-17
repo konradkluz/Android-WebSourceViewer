@@ -2,10 +2,13 @@ package com.konradkluz.websourceviewer.ui;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.util.Patterns;
 
 import com.konradkluz.websourceviewer.model.entities.Response;
 import com.konradkluz.websourceviewer.model.repository.RemoteRepository;
 import com.konradkluz.websourceviewer.rx.SchedulersFacade;
+
+import java.util.IllegalFormatException;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -47,6 +50,10 @@ public class MainActivityViewModel extends ViewModel {
     }
 
     public void loadPageSource(String url) {
+        if (!Patterns.WEB_URL.matcher(url).matches()) {
+            response.setValue(Response.wrongUrl(url));
+            return;
+        }
         compositeDisposable.add(mRemoteRepository
                 .getPageSource(url,
                         mSchedulersFacade.io(),
