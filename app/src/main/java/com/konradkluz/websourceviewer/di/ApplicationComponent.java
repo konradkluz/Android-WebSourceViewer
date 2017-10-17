@@ -3,6 +3,7 @@ package com.konradkluz.websourceviewer.di;
 import android.app.Application;
 
 import com.konradkluz.websourceviewer.App;
+import com.konradkluz.websourceviewer.model.ApiModule;
 
 import javax.inject.Singleton;
 
@@ -17,6 +18,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
 @Component(modules = {
         AndroidSupportInjectionModule.class,
         ApplicationModule.class,
+        ApiModule.class,
         ActivityBuilder.class
 })
 public interface ApplicationComponent {

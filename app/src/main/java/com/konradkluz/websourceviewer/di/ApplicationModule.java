@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 
+import com.konradkluz.websourceviewer.rx.SchedulersFacade;
 import com.konradkluz.websourceviewer.ui.MainActivityComponent;
 import com.konradkluz.websourceviewer.viewmodel.ViewModelFactory;
 
