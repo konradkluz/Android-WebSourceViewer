@@ -83,11 +83,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case ERROR_SERVER:
                 Toast.makeText(this, "Server error", Toast.LENGTH_SHORT).show();
-                Timber.e(response.error);
+                Timber.e(response.error, "Server error");
                 break;
             case ERROR_NETWORK:
                 Toast.makeText(this, "Network connection error", Toast.LENGTH_SHORT).show();
-                Timber.e(response.error);
+                Timber.e(response.error, "Network connection error");
                 break;
             case ERROR_OTHER:
                 Toast.makeText(this, "Unknown error", Toast.LENGTH_SHORT).show();
