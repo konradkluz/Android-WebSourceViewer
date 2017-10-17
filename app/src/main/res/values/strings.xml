@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">WebSourceViewer</string>
+    <string name="action_settings">Settings</string>
+    <string name="url_text">http://www.wp.pl</string>
+    <string name="url_text_description">Type URL</string>
+    <string name="url_text_hint">Type URL</string>
+    <string name="result_request_text">Request result</string>
+</resources>
