@@ -2,11 +2,11 @@ package com.konradkluz.websourceviewer.ui;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
-import android.util.Patterns;
 
 import com.konradkluz.websourceviewer.model.entities.Response;
 import com.konradkluz.websourceviewer.model.repository.RemoteRepository;
 import com.konradkluz.websourceviewer.rx.SchedulersFacade;
+import com.konradkluz.websourceviewer.util.Utils;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -30,13 +30,16 @@ public class MainActivityViewModel extends ViewModel {
     private CompositeDisposable compositeDisposable;
     private RemoteRepository mRemoteRepository;
     private SchedulersFacade mSchedulersFacade;
+    private Utils mUtils;
 
     @Inject
     public MainActivityViewModel(RemoteRepository remoteRepository,
-                                 SchedulersFacade schedulersFacade) {
+                                 SchedulersFacade schedulersFacade,
+                                 Utils utils) {
         mRemoteRepository = remoteRepository;
         mSchedulersFacade = schedulersFacade;
         compositeDisposable = new CompositeDisposable();
+        mUtils = utils;
     }
 
     public MutableLiveData<Response<String>> getResponse() {
@@ -48,23 +51,22 @@ public class MainActivityViewModel extends ViewModel {
     }
 
     public void loadPageSource(String url) {
-        if (!Patterns.WEB_URL.matcher(url).matches() ||
-                (!url.startsWith("http") && !url.startsWith("https"))) {
+        if (!mUtils.isUrlValid(url)) {
             response.setValue(Response.wrongUrl(url));
-            return;
+        } else {
+            compositeDisposable.add(mRemoteRepository
+                    .getPageSource(url,
+                            mSchedulersFacade.io(),
+                            mSchedulersFacade.ui()
+                    )
+                    .doOnSubscribe(s -> loadingStatus.setValue(true))
+                    .doAfterTerminate(() -> loadingStatus.setValue(false))
+                    .subscribe(s -> {
+                                response.setValue(Response.success(s));
+                            },
+                            error -> response.setValue(Response.error(error)))
+            );
         }
-        compositeDisposable.add(mRemoteRepository
-                .getPageSource(url,
-                        mSchedulersFacade.io(),
-                        mSchedulersFacade.ui()
-                )
-                .doOnSubscribe(s -> loadingStatus.setValue(true))
-                .doAfterTerminate(() -> loadingStatus.setValue(false))
-                .subscribe(s -> {
-                            response.setValue(Response.success(s));
-                        },
-                        error -> response.setValue(Response.error(error)))
-        );
     }
 
     @Override

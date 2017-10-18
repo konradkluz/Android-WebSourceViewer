@@ -3,6 +3,7 @@ package com.konradkluz.websourceviewer.util;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Patterns;
 
 import javax.inject.Inject;
 
@@ -21,5 +22,10 @@ public class Utils {
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    public boolean isUrlValid(String url) {
+        return !(!Patterns.WEB_URL.matcher(url).matches() ||
+                (!url.startsWith("http") && !url.startsWith("https")));
     }
 }

@@ -28,5 +28,4 @@ public class MainActivityModule {
     MutableLiveData<Boolean> provideLoadingStatusLiveData() {
         return new MutableLiveData<>();
     }
-
 }

@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import com.konradkluz.websourceviewer.model.entities.Response;
 import com.konradkluz.websourceviewer.model.repository.RemoteRepositoryImpl;
 import com.konradkluz.websourceviewer.rx.SchedulersFacade;
+import com.konradkluz.websourceviewer.util.Utils;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,6 +32,7 @@ public class MainActivityViewModelTest {
     private SchedulersFacade mSchedulersFacade;
     private MutableLiveData<Response<String>> mResponse;
     private MutableLiveData<Boolean> mLoadingStatus;
+    private Utils mUtils;
 
     @Before
     public void setup() throws Exception {
@@ -38,7 +40,9 @@ public class MainActivityViewModelTest {
         mLoadingStatus = mock(MutableLiveData.class);
         mRemoteRepository = mock(RemoteRepositoryImpl.class);
         mSchedulersFacade = mock(SchedulersFacade.class);
-        mMainActivityViewModel = new MainActivityViewModel(mRemoteRepository, mSchedulersFacade);
+        mUtils = mock(Utils.class);
+
+        mMainActivityViewModel = new MainActivityViewModel(mRemoteRepository, mSchedulersFacade, mUtils);
         mMainActivityViewModel.response = mResponse;
         mMainActivityViewModel.loadingStatus = mLoadingStatus;
     }
@@ -51,6 +55,7 @@ public class MainActivityViewModelTest {
         String response = "test_response";
 
         //when
+        when(mUtils.isUrlValid(url)).thenReturn(true);
         when(mSchedulersFacade.io()).thenReturn(testScheduler);
         when(mSchedulersFacade.ui()).thenReturn(testScheduler);
         when(mRemoteRepository.getPageSource(url, mSchedulersFacade.io(), mSchedulersFacade.ui()))
@@ -71,6 +76,7 @@ public class MainActivityViewModelTest {
         HttpException httpException = new HttpException(retrofit2.Response.error(500, responseBody));
 
         //when
+        when(mUtils.isUrlValid(url)).thenReturn(true);
         when(mSchedulersFacade.io()).thenReturn(testScheduler);
         when(mSchedulersFacade.ui()).thenReturn(testScheduler);
         when(mRemoteRepository.getPageSource(url, mSchedulersFacade.io(), mSchedulersFacade.ui()))
@@ -80,5 +86,23 @@ public class MainActivityViewModelTest {
 
         //then
         verify(mResponse, times(1)).setValue(Response.error(httpException));
+    }
+
+    @Test
+    public void loadPageSourceWithValidationErrorResponseShouldSetResponseWithValidationErrorToLiveData() {
+        //given
+        TestScheduler testScheduler = new TestScheduler();
+        String url = "test_url";
+        ResponseBody responseBody = ResponseBody.create(MediaType.parse("text"), "error");
+
+        //when
+        when(mUtils.isUrlValid(url)).thenReturn(false);
+        when(mSchedulersFacade.io()).thenReturn(testScheduler);
+        when(mSchedulersFacade.ui()).thenReturn(testScheduler);
+        //and
+        mMainActivityViewModel.loadPageSource(url);
+
+        //then
+        verify(mResponse, times(1)).setValue(Response.wrongUrl(url));
     }
 }

@@ -1,7 +1,6 @@
 package com.konradkluz.websourceviewer.model.repository;
 
 import com.konradkluz.websourceviewer.model.api.PageSourceService;
-import com.konradkluz.websourceviewer.model.entities.Response;
 
 import javax.inject.Inject;
 
