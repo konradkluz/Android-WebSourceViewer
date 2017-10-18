@@ -18,7 +18,7 @@ public class MainActivityModule {
     @Named("responseLiveData")
     @Provides
     @MainActivityScope
-    MutableLiveData<Response<String>> provideMutableLiveDataResponse(){
+    MutableLiveData<Response<String>> provideMutableLiveDataResponse() {
         return new MutableLiveData<>();
     }
 

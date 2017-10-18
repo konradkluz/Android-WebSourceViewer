@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.konradkluz.websourceviewer.R;
 import com.konradkluz.websourceviewer.model.entities.Response;
@@ -56,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
 
         observeLoadingStatus();
         observeResponse();
-
     }
 
     @OnClick(R.id.fab)
@@ -79,22 +77,22 @@ public class MainActivity extends AppCompatActivity {
         switch (response.status) {
             case SUCCESS:
                 mTextView.setText(response.data);
-                Timber.d("Response received with source: %s", response.data);
+                Timber.d("Response received with source.");
                 break;
             case ERROR_SERVER:
-                Toast.makeText(this, "Server error", Toast.LENGTH_SHORT).show();
+                mTextView.setText(R.string.server_error_text);
                 Timber.e(response.error, "Server error");
                 break;
             case ERROR_NETWORK:
-                Toast.makeText(this, "Network connection error", Toast.LENGTH_SHORT).show();
+                mTextView.setText(R.string.network_error_text);
                 Timber.e(response.error, "Network connection error");
                 break;
             case ERROR_OTHER:
-                Toast.makeText(this, "Unknown error", Toast.LENGTH_SHORT).show();
+                mTextView.setText(R.string.unknown_error_text);
                 Timber.e(response.error);
                 break;
             case ERROR_VALIDATION:
-                Toast.makeText(this, "Wrong URL. Please type correct one.", Toast.LENGTH_SHORT).show();
+                mTextView.setText(R.string.validation_error_text);
                 Timber.w("Wrong URL: %s", response.data);
                 break;
         }

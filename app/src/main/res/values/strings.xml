@@ -5,4 +5,8 @@
     <string name="url_text_description">Type URL</string>
     <string name="url_text_hint">Type URL</string>
     <string name="result_request_text">Request result</string>
+    <string name="server_error_text">Server error.</string>
+    <string name="network_error_text">Network connection error or page does not exist.</string>
+    <string name="unknown_error_text">Unknown error.</string>
+    <string name="validation_error_text">Wrong URL. Please type correct one.</string>
 </resources>
