@@ -8,6 +8,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
@@ -17,18 +19,19 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 @Module
 public class ApiModule {
 
-//    @Provides
-//    public OkHttpClient provideClient() {
-//        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-//        interceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
-//        return new OkHttpClient.Builder().addInterceptor(interceptor).build();
-//    }
+    @Provides
+    public OkHttpClient provideClient() {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+        return new OkHttpClient.Builder().addInterceptor(interceptor).build();
+    }
 
     @Provides
     @Singleton
     public PageSourceService providePageSourceService() {
         return new Retrofit.Builder()
                 .baseUrl("https://www.wp.pl")
+                .client(provideClient())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
                 .create(PageSourceService.class);

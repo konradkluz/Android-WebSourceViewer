@@ -50,7 +50,8 @@ public class MainActivityViewModel extends ViewModel {
     }
 
     public void loadPageSource(String url) {
-        if (!Patterns.WEB_URL.matcher(url).matches()) {
+        if (!Patterns.WEB_URL.matcher(url).matches() ||
+                (!url.startsWith("http") && !url.startsWith("https")) ) {
             response.setValue(Response.wrongUrl(url));
             return;
         }
